@@ -106,6 +106,8 @@ document.addEventListener('DOMContentLoaded', () => {
     if (e.target === lightbox) closeLightbox();
   });
 
+  document.getElementById('lightboxClose')?.addEventListener('click', closeLightbox);
+
   document.addEventListener('keydown', (e) => {
     if (e.key === 'Escape') closeLightbox();
   });

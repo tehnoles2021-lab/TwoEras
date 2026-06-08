@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Две Эпохи | Апартаменты на Васильевском острове</title>
-  <meta name="description" content="Апартаменты на Васильевском острове, 18 линия. Вид на весь Санкт-Петербург с 11 этажа. Посуточная аренда.">
+  <meta name="description" content="Апартаменты на Васильевском острове, 18 линия. Панорамный вид на весь Санкт-Петербург. Посуточная аренда.">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
@@ -99,8 +99,8 @@
       <span class="section__label lang-en">About</span>
       <h2 class="section__title lang-ru">Две эпохи — один вид</h2>
       <h2 class="section__title lang-en">Two Eras — One View</h2>
-      <p class="section__desc lang-ru">49 кв.м. уюта на 11 этаже. Комната, кухня, застеклённый балкон и панорама, от которой захватывает дух.</p>
-      <p class="section__desc lang-en">49 sqm of comfort on the 11th floor. Living room, kitchen, glassed balcony, and a view that takes your breath away.</p>
+      <p class="section__desc lang-ru">49 кв.м. уюта с панорамным видом. Комната, кухня, застеклённый балкон и панорама, от которой захватывает дух.</p>
+      <p class="section__desc lang-en">49 sqm of comfort with a panoramic view. Living room, kitchen, glassed balcony, and a view that takes your breath away.</p>
     </div>
 
     <div class="about__grid">
@@ -117,8 +117,8 @@
         <div class="about__features">
           <div class="about__feature">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z"/><line x1="4" y1="22" x2="4" y2="15"/></svg>
-            <span class="lang-ru">11 этаж, панорамный вид</span>
-            <span class="lang-en">11th floor, panoramic view</span>
+            <span class="lang-ru">Панорамный вид</span>
+            <span class="lang-en">Panoramic view</span>
           </div>
           <div class="about__feature">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z"/></svg>
@@ -163,8 +163,8 @@
         </div>
         <h3 class="advantage-card__title lang-ru">Панорама города</h3>
         <h3 class="advantage-card__title lang-en">City Panorama</h3>
-        <p class="advantage-card__desc lang-ru">Застеклённый балкон на 11 этаже — ваша личная смотровая площадка. Петропавловская крепость, Исаакиевский собор, Эрмитаж — как на ладони.</p>
-        <p class="advantage-card__desc lang-en">A glassed balcony on the 11th floor — your private observation deck. Peter and Paul Fortress, St. Isaac's Cathedral, the Hermitage — all at your fingertips.</p>
+        <p class="advantage-card__desc lang-ru">Застеклённый балкон — ваша личная смотровая площадка. Петропавловская крепость, Исаакиевский собор, Эрмитаж — как на ладони.</p>
+        <p class="advantage-card__desc lang-en">A glassed balcony — your private observation deck. Peter and Paul Fortress, St. Isaac's Cathedral, the Hermitage — all at your fingertips.</p>
       </div>
 
       <div class="advantage-card">
@@ -238,7 +238,10 @@
 
     <!-- Lightbox -->
     <div class="lightbox" id="lightbox">
-      <span class="lightbox__close">ESC &mdash; закрыть</span>
+      <button class="lightbox__close" id="lightboxClose" aria-label="Закрыть">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+      </button>
+      <span class="lightbox__hint">ESC &mdash; закрыть</span>
       <img class="lightbox__img" id="lightboxImg" alt="">
     </div>
   </div>
@@ -319,7 +322,7 @@
         </div>
       </div>
       <div class="location__map">
-        <iframe src="https://yandex.ru/map-widget/v1/?ll=30.273888%2C59.943605&z=16&pt=30.273888%2C59.943605&l=map&size=600%2C450" width="100%" height="100%" style="border:0;min-height:400px" allowfullscreen loading="lazy"></iframe>
+        <iframe src="https://yandex.ru/map-widget/v1/?ll=30.260864%2C59.941240&z=16&pt=30.260864%2C59.941240%2Cpm2rdl&l=map&text=%D0%A1%D0%B0%D0%BD%D0%BA%D1%82-%D0%9F%D0%B5%D1%82%D0%B5%D1%80%D0%B1%D1%83%D1%80%D0%B3%2C%2018-%D1%8F%20%D0%BB%D0%B8%D0%BD%D0%B8%D1%8F%20%D0%92.%D0%9E.%2C%20%D0%B4.%2049" width="100%" height="100%" style="border:0;min-height:400px" allowfullscreen loading="lazy"></iframe>
       </div>
     </div>
   </div>
