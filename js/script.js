@@ -111,4 +111,53 @@ document.addEventListener('DOMContentLoaded', () => {
   document.addEventListener('keydown', (e) => {
     if (e.key === 'Escape') closeLightbox();
   });
+
+  // --- Form ---
+  const BOT_TOKEN = '8545791077:AAF3v6osGQ5b-n0VdFtvAnnxQt0dJW5nzI0';
+  const CHAT_ID = '2003616265';
+
+  document.getElementById('contactForm')?.addEventListener('submit', async (e) => {
+    e.preventDefault();
+
+    const name = document.getElementById('formName').value.trim();
+    const phone = document.getElementById('formPhone').value.trim();
+    const email = document.getElementById('formEmail').value.trim();
+    const dates = document.getElementById('formDates').value.trim();
+    const msg = document.getElementById('formMessage').value.trim();
+
+    const text = `📩 Новая заявка с сайта «Две Эпохи»
+
+👤 Имя: ${name}
+📞 Телефон: ${phone}
+📧 Email: ${email}
+📅 Даты: ${dates || 'не указаны'}
+💬 Сообщение: ${msg || '—'}`;
+
+    const btn = e.target.querySelector('button[type="submit"]');
+    const originalText = btn.innerHTML;
+    btn.innerHTML = '⏳ Отправка...';
+    btn.disabled = true;
+
+    try {
+      const res = await fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ chat_id: CHAT_ID, text })
+      });
+
+      if (res.ok) {
+        btn.innerHTML = '✅ Отправлено!';
+        e.target.reset();
+      } else {
+        btn.innerHTML = '❌ Ошибка';
+      }
+    } catch {
+      btn.innerHTML = '❌ Ошибка';
+    }
+
+    setTimeout(() => {
+      btn.innerHTML = originalText;
+      btn.disabled = false;
+    }, 3000);
+  });
 });

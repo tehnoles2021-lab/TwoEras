@@ -460,33 +460,33 @@
         </div>
       </div>
 
-      <form class="contact__form">
+      <form class="contact__form" id="contactForm">
         <div class="form__row">
           <div class="form__group">
             <label class="form__label lang-ru">Имя</label>
             <label class="form__label lang-en">Name</label>
-            <input type="text" class="form__input" required>
+            <input type="text" class="form__input" id="formName" required>
           </div>
           <div class="form__group">
             <label class="form__label lang-ru">Телефон</label>
             <label class="form__label lang-en">Phone</label>
-            <input type="tel" class="form__input" required>
+            <input type="tel" class="form__input" id="formPhone" required>
           </div>
         </div>
         <div class="form__group">
           <label class="form__label lang-ru">Email</label>
           <label class="form__label lang-en">Email</label>
-          <input type="email" class="form__input" required>
+          <input type="email" class="form__input" id="formEmail" required>
         </div>
         <div class="form__group">
           <label class="form__label lang-ru">Даты пребывания</label>
           <label class="form__label lang-en">Dates of stay</label>
-          <input type="text" class="form__input" placeholder="например, 15–20 июня 2026">
+          <input type="text" class="form__input" id="formDates" placeholder="например, 15–20 июня 2026">
         </div>
         <div class="form__group">
           <label class="form__label lang-ru">Сообщение</label>
           <label class="form__label lang-en">Message</label>
-          <textarea class="form__textarea lang-ru" placeholder="Расскажите о ваших пожеланиях..."></textarea>
+          <textarea class="form__textarea lang-ru" id="formMessage" placeholder="Расскажите о ваших пожеланиях..."></textarea>
           <textarea class="form__textarea lang-en" placeholder="Tell us about your preferences..."></textarea>
         </div>
         <button type="submit" class="btn btn--primary" style="width:100%;justify-content:center">
