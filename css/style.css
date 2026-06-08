@@ -36,6 +36,7 @@ body {
   background: var(--color-bg);
   line-height: 1.6;
   -webkit-font-smoothing: antialiased;
+  -webkit-tap-highlight-color: transparent;
 }
 
 a {
@@ -177,6 +178,7 @@ img {
 /* ===== Hero ===== */
 .hero {
   min-height: 100vh;
+  min-height: 100dvh;
   display: flex;
   align-items: center;
   position: relative;
@@ -861,8 +863,10 @@ body.lang-active-ru .lang-ru {
 }
 
 .mobile-menu a {
-  display: block;
-  padding: 12px 0;
+  display: flex;
+  align-items: center;
+  min-height: 48px;
+  padding: 0 0;
   font-size: 1rem;
   font-weight: 500;
   color: var(--color-text);
@@ -881,19 +885,27 @@ body.lang-active-ru .lang-ru {
 }
 
 @media (max-width: 768px) {
-  :root { --header-h: 64px; }
+  :root { --header-h: 56px; }
 
   .header__nav { display: none; }
-  .mobile-toggle { display: flex; }
+  .mobile-toggle {
+    display: flex;
+    padding: 8px;
+    min-width: 44px;
+    min-height: 44px;
+    align-items: center;
+    justify-content: center;
+  }
 
   .hero { min-height: 0; }
-  .hero__content { padding: 100px 0 80px; }
+  .hero__content { padding: 90px 0 60px; }
   .hero__title { font-size: 2rem; }
   .hero__subtitle { font-size: 1rem; }
 
   .section { padding: 60px 0; }
-  .section__header { margin-bottom: 40px; }
+  .section__header { margin-bottom: 32px; }
   .section__title { font-size: 1.6rem; }
+  .section__desc { font-size: 0.95rem; }
 
   .about__grid,
   .location__grid,
@@ -902,7 +914,7 @@ body.lang-active-ru .lang-ru {
     gap: 32px;
   }
 
-  .about__image img { height: 280px; }
+  .about__image img { height: 240px; }
   .about__features { grid-template-columns: 1fr; }
 
   .advantages__grid,
@@ -914,14 +926,31 @@ body.lang-active-ru .lang-ru {
     max-height: 60vh;
   }
 
-  .contact__form { padding: 24px; }
+  .advantage-card { padding: 28px 20px; }
+
+  .review-card { padding: 24px 20px; }
+
+  .contact__form { padding: 24px 20px; }
   .form__row { grid-template-columns: 1fr; }
 
   .footer__inner { flex-direction: column; text-align: center; }
+  .footer__links { flex-wrap: wrap; justify-content: center; gap: 12px; }
 }
 
 @media (max-width: 480px) {
+  .container { padding: 0 16px; }
+
   .hero__title { font-size: 1.6rem; }
   .hero__actions { flex-direction: column; }
-  .btn { justify-content: center; }
+  .hero__actions .btn,
+  .contact__info .btn { width: 100%; justify-content: center; }
+
+  .advantage-card { padding: 24px 16px; }
+}
+
+@media (max-width: 400px) {
+  .hero__title { font-size: 1.4rem; }
+  .hero__subtitle { font-size: 0.9rem; }
+  .section__title { font-size: 1.4rem; }
+  .about__image img { height: 200px; }
 }
