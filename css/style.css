@@ -938,7 +938,8 @@ body.lang-active-ru .lang-ru {
   }
 
   .hero { min-height: 0; }
-  .hero__content { padding: 180px 0 80px; }
+  .hero__content { padding: 110px 0 60px; }
+  .hero__title { margin-top: 20px; }
   .hero__title { font-size: 2rem; }
   .hero__subtitle { font-size: 1rem; }
 
