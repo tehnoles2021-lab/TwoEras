@@ -16,8 +16,11 @@ document.addEventListener('DOMContentLoaded', () => {
     localStorage.setItem('twoeras-lang', lang);
   };
 
+  const urlLang = new URLSearchParams(window.location.search).get('lang');
   const savedLang = localStorage.getItem('twoeras-lang');
-  if (savedLang && ['ru', 'en'].includes(savedLang)) {
+  if (urlLang && ['ru', 'en'].includes(urlLang)) {
+    setLang(urlLang);
+  } else if (savedLang && ['ru', 'en'].includes(savedLang)) {
     setLang(savedLang);
   } else {
     setLang('ru');
@@ -74,17 +77,56 @@ document.addEventListener('DOMContentLoaded', () => {
     '33-IMGP4056.jpg','34-IMGP4057.jpg','35-IMGP4058.jpg','36-IMGP4061.jpg'
   ];
 
+  const ALTS = [
+    'Гостиная с панорамным окном — вид на Санкт-Петербург',
+    'Диван и журнальный столик в интерьере гостиной',
+    'Обеденная зона с панорамным видом на город',
+    'Панорамный вид на Санкт-Петербург из апартаментов',
+    'Кухня-гостиная с современной мебелью',
+    'Кухонный гарнитур и барная стойка',
+    'Спальня с большой кроватью и видом на город',
+    'Спальня — мягкая кровать и текстиль',
+    'Ванная комната с душевой кабиной',
+    'Ванная комната — раковина и зеркало',
+    'Коридор с вешалкой и дизайнерскими светильниками',
+    'Прихожая с комодом и зеркалом',
+    'Интерьер гостиной — панорамное окно во всю стену',
+    'Мягкий диван и подушки в гостиной',
+    'Обеденный стол на 4 персоны',
+    'Кухня с бытовой техникой и посудой',
+    'Вид из окна на Васильевский остров',
+    'Спальня — кровать с балдахином',
+    'Прикроватная тумба и ночник',
+    'Ванная — полочки с принадлежностями',
+    'Гостиная — телевизор и медиазона',
+    'Рабочее место у окна',
+    'Деталь интерьера — декоративные подушки',
+    'Цветы и декор на обеденном столе',
+    'Вечерний вид на город с подсветкой',
+    'Ночной Санкт-Петербург из окна апартаментов',
+    'Чайная зона с чайником и чашками',
+    'Деталь интерьера — настольная лампа',
+    'Зеркало в полный рост в прихожей',
+    'Вешалка для одежды и пуф',
+    'Гостиная — крупный план дивана',
+    'Кухня — крупный план столешницы',
+    'Ванная — крупный план смесителя',
+    'Спальня — крупный план покрывала',
+    'Декоративная ваза в интерьере',
+    'Общий вид гостиной и кухни'
+  ];
+
   const galleryGrid = document.getElementById('galleryGrid');
   const lightbox = document.getElementById('lightbox');
   const lightboxImg = document.getElementById('lightboxImg');
 
-  IMAGES.forEach((name) => {
+  IMAGES.forEach((name, i) => {
     const item = document.createElement('div');
     item.className = 'gallery__item';
 
     const img = document.createElement('img');
     img.src = `images/thumbs/${name}`;
-    img.alt = name;
+    img.alt = ALTS[i] || name;
     img.loading = 'lazy';
 
     img.addEventListener('click', () => {
@@ -113,25 +155,8 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 
   // --- Form ---
-  const BOT_TOKEN = '8545791077:AAF3v6osGQ5b-n0VdFtvAnnxQt0dJW5nzI0';
-  const CHAT_ID = '2003616265';
-
   document.getElementById('contactForm')?.addEventListener('submit', async (e) => {
     e.preventDefault();
-
-    const name = document.getElementById('formName').value.trim();
-    const phone = document.getElementById('formPhone').value.trim();
-    const email = document.getElementById('formEmail').value.trim();
-    const dates = document.getElementById('formDates').value.trim();
-    const msg = document.getElementById('formMessage').value.trim();
-
-    const text = `📩 Новая заявка с сайта «Две Эпохи»
-
-👤 Имя: ${name}
-📞 Телефон: ${phone}
-📧 Email: ${email}
-📅 Даты: ${dates || 'не указаны'}
-💬 Сообщение: ${msg || '—'}`;
 
     const btn = e.target.querySelector('button[type="submit"]');
     const originalText = btn.innerHTML;
@@ -139,10 +164,16 @@ document.addEventListener('DOMContentLoaded', () => {
     btn.disabled = true;
 
     try {
-      const res = await fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`, {
+      const res = await fetch('https://twoeras-form.tehnoles2021.workers.dev', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ chat_id: CHAT_ID, text })
+        body: JSON.stringify({
+          name: document.getElementById('formName').value.trim(),
+          phone: document.getElementById('formPhone').value.trim(),
+          email: document.getElementById('formEmail').value.trim(),
+          dates: document.getElementById('formDates').value.trim(),
+          message: document.getElementById('formMessage').value.trim()
+        })
       });
 
       if (res.ok) {
