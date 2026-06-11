@@ -163,8 +163,13 @@ document.addEventListener('DOMContentLoaded', () => {
     btn.innerHTML = '⏳ Отправка...';
     btn.disabled = true;
 
+    const visible = (sel) => {
+      const el = document.querySelector(sel);
+      return el && el.offsetParent !== null ? el.value.trim() : '';
+    };
+
     try {
-      const res = await fetch('https://twoeras-form.tehnoles2021.workers.dev', {
+      const res = await fetch('https://formsubmit.co/ajax/tehnoles2007@yandex.ru', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -172,7 +177,7 @@ document.addEventListener('DOMContentLoaded', () => {
           phone: document.getElementById('formPhone').value.trim(),
           email: document.getElementById('formEmail').value.trim(),
           dates: document.getElementById('formDates').value.trim(),
-          message: document.getElementById('formMessage').value.trim()
+          message: visible('#formMessage') || visible('.form__textarea.lang-en')
         })
       });
 
