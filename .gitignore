@@ -1,2 +1,5 @@
 TOKEN*
 Согласие*
+package-lock.json
+*.md
+.wrangler/

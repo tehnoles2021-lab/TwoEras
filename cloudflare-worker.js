@@ -2,7 +2,7 @@ addEventListener('fetch', event => {
   event.respondWith(handleRequest(event.request))
 })
 
-const SENDGRID_KEY = 'Q44MQK8WSLUY5TDMJ6M7NFF1'
+// SendGrid key задаётся через wrangler secret put SENDGRID_KEY (не хранить в коде!)
 const TO_EMAIL = 'tehnoles2007@yandex.ru'
 const FROM_EMAIL = 'tehnoles2007@yandex.ru'
 const ALLOWED_ORIGIN = 'https://tehnoles2021-lab.github.io'
@@ -59,7 +59,7 @@ Email: ${email || '—'}
     const sgRes = await fetch('https://api.sendgrid.com/v3/mail/send', {
       method: 'POST',
       headers: {
-        'Authorization': `Bearer ${SENDGRID_KEY}`,
+        'Authorization': `Bearer ${typeof SENDGRID_KEY !== 'undefined' ? SENDGRID_KEY : ''}`,
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
