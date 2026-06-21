@@ -169,7 +169,7 @@ document.addEventListener('DOMContentLoaded', () => {
     };
 
     try {
-      const res = await fetch('https://twoeras-form.tehnoles2021.workers.dev/', {
+      const res = await fetch('https://formsubmit.co/ajax/tehnoles2007@yandex.ru', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
