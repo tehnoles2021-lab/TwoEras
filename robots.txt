@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://tehnoles2021-lab.github.io/TwoEras/sitemap.xml

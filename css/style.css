@@ -479,6 +479,115 @@ img {
   transform: scale(1.05);
 }
 
+/* ===== Video section ===== */
+.video__card {
+  position: relative;
+  max-width: 700px;
+  margin: 0 auto;
+  border-radius: var(--radius);
+  overflow: hidden;
+  box-shadow: var(--shadow-md);
+  background: linear-gradient(135deg, var(--color-primary) 0%, #16213e 100%);
+  aspect-ratio: 16/9;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+
+.video__btn {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+  background: none;
+  border: none;
+  color: var(--color-white);
+  cursor: pointer;
+  font-family: var(--font-main);
+  font-size: 1.1rem;
+  font-weight: 600;
+  padding: 40px;
+  transition: var(--transition);
+}
+
+.video__btn svg {
+  transition: var(--transition);
+  filter: drop-shadow(0 4px 12px rgba(0,0,0,0.3));
+}
+
+.video__btn:hover svg {
+  transform: scale(1.1);
+  filter: drop-shadow(0 6px 20px rgba(0,0,0,0.4));
+}
+
+.video__btn:hover {
+  color: var(--color-accent);
+}
+
+/* ===== Video overlay ===== */
+.video-overlay {
+  display: none;
+  position: fixed;
+  z-index: 3000;
+  inset: 0;
+  background: rgba(0,0,0,0.93);
+  align-items: center;
+  justify-content: center;
+  padding: 40px;
+}
+
+.video-overlay.open {
+  display: flex;
+}
+
+.video-overlay__close {
+  position: fixed;
+  top: 16px;
+  right: 16px;
+  z-index: 3001;
+  width: 44px;
+  height: 44px;
+  border: none;
+  background: rgba(0,0,0,0.4);
+  backdrop-filter: blur(4px);
+  border-radius: 50%;
+  color: rgba(255,255,255,0.85);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: var(--transition);
+}
+
+.video-overlay__close:hover {
+  background: rgba(0,0,0,0.6);
+  color: #fff;
+}
+
+.video-overlay__close svg {
+  width: 22px;
+  height: 22px;
+}
+
+.video-overlay__video {
+  max-width: 90vw;
+  max-height: 85vh;
+  width: 100%;
+  border-radius: 8px;
+  box-shadow: 0 0 60px rgba(0,0,0,0.5);
+}
+
+@media (max-width: 768px) {
+  .video-overlay {
+    padding: 16px;
+  }
+  .video-overlay__video {
+    max-width: 98vw;
+    max-height: 50vh;
+  }
+}
+
 /* ===== Lightbox ===== */
 .lightbox {
   display: none;

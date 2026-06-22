@@ -2,11 +2,9 @@ addEventListener('fetch', event => {
   event.respondWith(handleRequest(event.request))
 })
 
-// SendGrid key задаётся через wrangler secret put SENDGRID_KEY (не хранить в коде!)
-const TO_EMAIL = 'tehnoles2007@yandex.ru'
-const FROM_EMAIL = 'tehnoles2007@yandex.ru'
+// Telegram bot token задаётся через: wrangler secret put TELEGRAM_BOT_TOKEN
+const TELEGRAM_CHAT_ID = '2003616265'
 const ALLOWED_ORIGIN = 'https://tehnoles2021-lab.github.io'
-const SITE_URL = 'https://tehnoles2021-lab.github.io/TwoEras/'
 
 const CORS_HEADERS = {
   'Access-Control-Allow-Origin': ALLOWED_ORIGIN,
@@ -37,54 +35,41 @@ async function handleRequest(request) {
   }
 
   const { name, phone, email, dates, message } = body
+  const TOKEN = typeof TELEGRAM_BOT_TOKEN !== 'undefined' ? TELEGRAM_BOT_TOKEN : ''
 
-  const text = `Имя: ${name || '—'}
-Телефон: ${phone || '—'}
-Email: ${email || '—'}
-Даты: ${dates || 'не указаны'}
-Сообщение: ${message || '—'}`
+  const tgText = `📩 <b>Новая заявка с сайта «Две Эпохи»</b>
 
-  const html = `
-<h2>📩 Новая заявка с сайта «Две Эпохи»</h2>
-<table style="border-collapse:collapse;width:100%;max-width:500px">
-  <tr><td style="padding:8px 12px;background:#f5f5f5;font-weight:600">Имя</td><td style="padding:8px 12px">${esc(name)}</td></tr>
-  <tr><td style="padding:8px 12px;background:#f5f5f5;font-weight:600">Телефон</td><td style="padding:8px 12px">${esc(phone)}</td></tr>
-  <tr><td style="padding:8px 12px;background:#f5f5f5;font-weight:600">Email</td><td style="padding:8px 12px">${esc(email)}</td></tr>
-  <tr><td style="padding:8px 12px;background:#f5f5f5;font-weight:600">Даты</td><td style="padding:8px 12px">${esc(dates)}</td></tr>
-  <tr><td style="padding:8px 12px;background:#f5f5f5;font-weight:600">Сообщение</td><td style="padding:8px 12px">${esc(message)}</td></tr>
-</table>
-<p style="color:#888;font-size:12px">Отправлено с сайта <a href="${SITE_URL}">Две Эпохи</a></p>`
+<b>Имя:</b> ${esc(name)}
+<b>Телефон:</b> ${esc(phone)}
+<b>Email:</b> ${esc(email)}
+<b>Даты:</b> ${esc(dates || 'не указаны')}
+<b>Сообщение:</b> ${esc(message || '—')}`
 
   try {
-    const sgRes = await fetch('https://api.sendgrid.com/v3/mail/send', {
+    const tgRes = await fetch(`https://api.telegram.org/bot${TOKEN}/sendMessage`, {
       method: 'POST',
-      headers: {
-        'Authorization': `Bearer ${typeof SENDGRID_KEY !== 'undefined' ? SENDGRID_KEY : ''}`,
-        'Content-Type': 'application/json',
-      },
+      headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
-        personalizations: [{ to: [{ email: TO_EMAIL }] }],
-        from: { email: FROM_EMAIL, name: 'Две Эпохи' },
-        subject: '📩 Новая заявка с сайта «Две Эпохи»',
-        content: [
-          { type: 'text/plain', value: text },
-          { type: 'text/html', value: html },
-        ],
+        chat_id: TELEGRAM_CHAT_ID,
+        text: tgText,
+        parse_mode: 'HTML',
       }),
     })
 
-    if (sgRes.ok) {
+    if (tgRes.ok) {
       return new Response(JSON.stringify({ ok: true }), {
         headers: { ...CORS_HEADERS, 'Content-Type': 'application/json' },
       })
     }
 
-    const errText = await sgRes.text()
-    return new Response(JSON.stringify({ ok: false, error: errText }), {
+    const errText = await tgRes.text()
+    console.error('Telegram error:', errText)
+    return new Response(JSON.stringify({ ok: false, error: 'Telegram error' }), {
       status: 500,
       headers: { ...CORS_HEADERS, 'Content-Type': 'application/json' },
     })
   } catch (e) {
+    console.error('Fetch error:', e.message)
     return new Response(JSON.stringify({ ok: false, error: e.message }), {
       status: 500,
       headers: { ...CORS_HEADERS, 'Content-Type': 'application/json' },

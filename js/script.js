@@ -152,7 +152,34 @@ document.addEventListener('DOMContentLoaded', () => {
 
   document.addEventListener('keydown', (e) => {
     if (e.key === 'Escape') closeLightbox();
+    if (e.key === 'Escape') closeVideo();
   });
+
+  // --- Video ---
+  const videoOverlay = document.getElementById('videoOverlay');
+  const videoEl = document.getElementById('videoEl');
+  const videoPlayBtn = document.getElementById('videoPlayBtn');
+
+  const openVideo = () => {
+    videoOverlay?.classList.add('open');
+    document.body.style.overflow = 'hidden';
+    videoEl?.play();
+  };
+
+  const closeVideo = () => {
+    videoOverlay?.classList.remove('open');
+    document.body.style.overflow = '';
+    videoEl?.pause();
+    videoEl.currentTime = 0;
+  };
+
+  videoPlayBtn?.addEventListener('click', openVideo);
+
+  videoOverlay?.addEventListener('click', (e) => {
+    if (e.target === videoOverlay) closeVideo();
+  });
+
+  document.getElementById('videoClose')?.addEventListener('click', closeVideo);
 
   // --- Form ---
   document.getElementById('contactForm')?.addEventListener('submit', async (e) => {
@@ -169,7 +196,7 @@ document.addEventListener('DOMContentLoaded', () => {
     };
 
     try {
-      const res = await fetch('https://formsubmit.co/ajax/tehnoles2007@yandex.ru', {
+      const res = await fetch('https://twoeras-form.tehnoles2021.workers.dev/', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
