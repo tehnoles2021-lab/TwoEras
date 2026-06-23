@@ -182,7 +182,6 @@ document.addEventListener('DOMContentLoaded', () => {
   document.getElementById('videoClose')?.addEventListener('click', closeVideo);
 
   // --- Form ---
-  const forminit = new Forminit();
   const FORM_ID = 'ky7r4r46i0q';
   const TG_WORKER = 'https://twoeras-form.tehnoles2021.workers.dev/';
 
@@ -205,21 +204,29 @@ document.addEventListener('DOMContentLoaded', () => {
       message: getVisibleMessage(),
     };
 
-    const { error } = await forminit.submit(FORM_ID, {
-      blocks: [
-        {
-          type: 'sender',
-          properties: { fullName: data.name, email: data.email, phone: data.phone },
-        },
-        { type: 'text', name: 'dates', value: data.dates },
-        { type: 'text', name: 'message', value: data.message },
-      ],
-    });
+    let ok = false;
 
-    if (error) {
+    try {
+      const res = await fetch(`https://forminit.com/f/${FORM_ID}`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          blocks: [
+            { type: 'sender', properties: { fullName: data.name, email: data.email, phone: data.phone } },
+            { type: 'text', name: 'dates', value: data.dates },
+            { type: 'text', name: 'message', value: data.message },
+          ],
+        }),
+      });
+      ok = res.ok;
+    } catch {
+      ok = false;
+    }
+
+    if (!ok) {
       btn.innerHTML = originalText;
       btn.disabled = false;
-      status.textContent = '❌ ' + error.message;
+      status.textContent = '❌ Ошибка отправки';
       status.className = 'form__status form__status--error';
       return;
     }

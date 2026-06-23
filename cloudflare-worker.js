@@ -4,34 +4,41 @@ addEventListener('fetch', event => {
 
 // Telegram bot token задаётся через: wrangler secret put TELEGRAM_BOT_TOKEN
 const TELEGRAM_CHAT_ID = '2003616265'
-const ALLOWED_ORIGIN = 'https://tehnoles2021-lab.github.io'
 
-const CORS_HEADERS = {
-  'Access-Control-Allow-Origin': ALLOWED_ORIGIN,
-  'Access-Control-Allow-Methods': 'POST, OPTIONS',
-  'Access-Control-Allow-Headers': 'Content-Type',
-  'Access-Control-Max-Age': '86400',
+function corsOrigin(request) {
+  const origin = request.headers.get('Origin') || ''
+  if (!origin) return '*'
+  if (origin.includes('tehnoles2021-lab.github.io')) return origin
+  if (origin.startsWith('http://localhost')) return origin
+  if (origin.startsWith('http://127.0.0.1')) return origin
+  return origin
+}
+
+function corsHeaders(request) {
+  return {
+    'Access-Control-Allow-Origin': corsOrigin(request),
+    'Access-Control-Allow-Methods': 'POST, OPTIONS',
+    'Access-Control-Allow-Headers': 'Content-Type',
+    'Access-Control-Max-Age': '86400',
+  }
 }
 
 async function handleRequest(request) {
+  const ch = corsHeaders(request)
+
   if (request.method === 'OPTIONS') {
-    return new Response('', { headers: CORS_HEADERS })
+    return new Response('', { headers: ch })
   }
 
   if (request.method !== 'POST') {
-    return new Response('Method not allowed', { status: 405, headers: CORS_HEADERS })
-  }
-
-  const origin = request.headers.get('Origin') || ''
-  if (!origin.startsWith(ALLOWED_ORIGIN)) {
-    return new Response('Forbidden', { status: 403, headers: CORS_HEADERS })
+    return new Response('Method not allowed', { status: 405, headers: ch })
   }
 
   let body
   try {
     body = await request.json()
   } catch {
-    return new Response('Invalid JSON', { status: 400, headers: CORS_HEADERS })
+    return new Response('Invalid JSON', { status: 400, headers: ch })
   }
 
   const { name, phone, email, dates, message } = body
@@ -58,7 +65,7 @@ async function handleRequest(request) {
 
     if (tgRes.ok) {
       return new Response(JSON.stringify({ ok: true }), {
-        headers: { ...CORS_HEADERS, 'Content-Type': 'application/json' },
+        headers: { ...ch, 'Content-Type': 'application/json' },
       })
     }
 
@@ -66,13 +73,13 @@ async function handleRequest(request) {
     console.error('Telegram error:', errText)
     return new Response(JSON.stringify({ ok: false, error: 'Telegram error' }), {
       status: 500,
-      headers: { ...CORS_HEADERS, 'Content-Type': 'application/json' },
+      headers: { ...ch, 'Content-Type': 'application/json' },
     })
   } catch (e) {
     console.error('Fetch error:', e.message)
     return new Response(JSON.stringify({ ok: false, error: e.message }), {
       status: 500,
-      headers: { ...CORS_HEADERS, 'Content-Type': 'application/json' },
+      headers: { ...ch, 'Content-Type': 'application/json' },
     })
   }
 }
