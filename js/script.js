@@ -182,45 +182,33 @@ document.addEventListener('DOMContentLoaded', () => {
   document.getElementById('videoClose')?.addEventListener('click', closeVideo);
 
   // --- Form ---
+  const forminit = new Forminit();
+  const FORM_ID = 'ky7r4r46i0q';
+
   document.getElementById('contactForm')?.addEventListener('submit', async (e) => {
     e.preventDefault();
 
     const btn = e.target.querySelector('button[type="submit"]');
+    const status = document.getElementById('form-status');
     const originalText = btn.innerHTML;
     btn.innerHTML = '⏳ Отправка...';
     btn.disabled = true;
+    status.textContent = '';
+    status.className = 'form__status';
 
-    const visible = (sel) => {
-      const el = document.querySelector(sel);
-      return el && el.offsetParent !== null ? el.value.trim() : '';
-    };
+    const { data, error } = await forminit.submit(FORM_ID, new FormData(e.target));
 
-    try {
-      const res = await fetch('https://twoeras-form.tehnoles2021.workers.dev/', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          name: document.getElementById('formName').value.trim(),
-          phone: document.getElementById('formPhone').value.trim(),
-          email: document.getElementById('formEmail').value.trim(),
-          dates: document.getElementById('formDates').value.trim(),
-          message: visible('#formMessage') || visible('.form__textarea.lang-en')
-        })
-      });
+    btn.disabled = false;
+    btn.innerHTML = originalText;
 
-      if (res.ok) {
-        btn.innerHTML = '✅ Отправлено!';
-        e.target.reset();
-      } else {
-        btn.innerHTML = '❌ Ошибка';
-      }
-    } catch {
-      btn.innerHTML = '❌ Ошибка';
+    if (error) {
+      status.textContent = '❌ ' + error.message;
+      status.className = 'form__status form__status--error';
+      return;
     }
 
-    setTimeout(() => {
-      btn.innerHTML = originalText;
-      btn.disabled = false;
-    }, 3000);
+    status.textContent = '✅ Отправлено!';
+    status.className = 'form__status form__status--success';
+    e.target.reset();
   });
 });
