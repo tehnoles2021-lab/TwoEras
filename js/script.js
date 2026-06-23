@@ -184,6 +184,7 @@ document.addEventListener('DOMContentLoaded', () => {
   // --- Form ---
   const forminit = new Forminit();
   const FORM_ID = 'ky7r4r46i0q';
+  const TG_WORKER = 'https://twoeras-form.tehnoles2021.workers.dev/';
 
   document.getElementById('contactForm')?.addEventListener('submit', async (e) => {
     e.preventDefault();
@@ -196,19 +197,53 @@ document.addEventListener('DOMContentLoaded', () => {
     status.textContent = '';
     status.className = 'form__status';
 
-    const { data, error } = await forminit.submit(FORM_ID, new FormData(e.target));
+    const data = {
+      name: document.getElementById('formName').value.trim(),
+      phone: document.getElementById('formPhone').value.trim(),
+      email: document.getElementById('formEmail').value.trim(),
+      dates: document.getElementById('formDates').value.trim(),
+      message: getVisibleMessage(),
+    };
 
-    btn.disabled = false;
-    btn.innerHTML = originalText;
+    const { error } = await forminit.submit(FORM_ID, {
+      blocks: [
+        {
+          type: 'sender',
+          properties: { fullName: data.name, email: data.email, phone: data.phone },
+        },
+        { type: 'text', name: 'dates', value: data.dates },
+        { type: 'text', name: 'message', value: data.message },
+      ],
+    });
 
     if (error) {
+      btn.innerHTML = originalText;
+      btn.disabled = false;
       status.textContent = '❌ ' + error.message;
       status.className = 'form__status form__status--error';
       return;
     }
 
+    // Telegram (фоном — не блокируем пользователя)
+    fetch(TG_WORKER, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(data),
+    }).catch(() => {});
+
     status.textContent = '✅ Отправлено!';
     status.className = 'form__status form__status--success';
     e.target.reset();
+    setTimeout(() => {
+      btn.innerHTML = originalText;
+      btn.disabled = false;
+    }, 2500);
   });
+
+  function getVisibleMessage() {
+    const ru = document.getElementById('formMessage');
+    if (ru.offsetParent !== null) return ru.value.trim();
+    const en = document.querySelector('.form__textarea.lang-en');
+    return en ? en.value.trim() : '';
+  }
 });
