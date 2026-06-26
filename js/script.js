@@ -65,16 +65,23 @@ document.addEventListener('DOMContentLoaded', () => {
   }, { passive: true });
 
   // --- Gallery ---
-  const IMAGES = [
-    '1-IMGP4013.jpg','2-IMGP4014.jpg','3-IMGP4015.jpg','4-IMGP4016.jpg',
-    '5-IMGP4017.jpg','6-IMGP4018.jpg','7-IMGP4019.jpg','8-IMGP4022.jpg',
-    '9-IMGP4023.jpg','10-IMGP4024.jpg','11-IMGP4025.jpg','12-IMGP4027.jpg',
-    '13-IMGP4028.jpg','14-IMGP4029.jpg','15-IMGP4030.jpg','16-IMGP4031.jpg',
-    '17-IMGP4032.jpg','18-IMGP4034.jpg','19-IMGP4035.jpg','20-IMGP4037.jpg',
-    '21-IMGP4038.jpg','22-IMGP4039.jpg','23-IMGP4040.jpg','24-IMGP4041.jpg',
-    '25-IMGP4046.jpg','26-IMGP4047.jpg','27-IMGP4049.jpg','28-IMGP4050.jpg',
-    '29-IMGP4052.jpg','30-IMGP4053.jpg','31-IMGP4054.jpg','32-IMGP4055.jpg',
-    '33-IMGP4056.jpg','34-IMGP4057.jpg','35-IMGP4058.jpg','36-IMGP4061.jpg'
+  const supportsWebP = (() => {
+    const c = document.createElement('canvas');
+    return c.toDataURL('image/webp').indexOf('data:image/webp') === 0;
+  })();
+
+  const IMG_EXT = supportsWebP ? 'webp' : 'jpg';
+
+  const IMAGE_NAMES = [
+    '1-IMGP4013','2-IMGP4014','3-IMGP4015','4-IMGP4016',
+    '5-IMGP4017','6-IMGP4018','7-IMGP4019','8-IMGP4022',
+    '9-IMGP4023','10-IMGP4024','11-IMGP4025','12-IMGP4027',
+    '13-IMGP4028','14-IMGP4029','15-IMGP4030','16-IMGP4031',
+    '17-IMGP4032','18-IMGP4034','19-IMGP4035','20-IMGP4037',
+    '21-IMGP4038','22-IMGP4039','23-IMGP4040','24-IMGP4041',
+    '25-IMGP4046','26-IMGP4047','27-IMGP4049','28-IMGP4050',
+    '29-IMGP4052','30-IMGP4053','31-IMGP4054','32-IMGP4055',
+    '33-IMGP4056','34-IMGP4057','35-IMGP4058','36-IMGP4061'
   ];
 
   const ALTS = [
@@ -120,17 +127,22 @@ document.addEventListener('DOMContentLoaded', () => {
   const lightbox = document.getElementById('lightbox');
   const lightboxImg = document.getElementById('lightboxImg');
 
-  IMAGES.forEach((name, i) => {
+  IMAGE_NAMES.forEach((name, i) => {
     const item = document.createElement('div');
     item.className = 'gallery__item';
 
     const img = document.createElement('img');
-    img.src = `images/thumbs/${name}`;
+    img.src = `images/thumbs/${name}.jpg`;
     img.alt = ALTS[i] || name;
     img.loading = 'lazy';
 
     img.addEventListener('click', () => {
-      lightboxImg.src = `images/${name}`;
+      lightboxImg.onerror = null;
+      lightboxImg.src = `images/${name}.${IMG_EXT}`;
+      lightboxImg.onerror = function () {
+        this.onerror = null;
+        this.src = `images/${name}.jpg`;
+      };
       lightbox.classList.add('open');
       document.body.style.overflow = 'hidden';
     });
