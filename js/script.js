@@ -126,6 +126,38 @@ document.addEventListener('DOMContentLoaded', () => {
   const galleryGrid = document.getElementById('galleryGrid');
   const lightbox = document.getElementById('lightbox');
   const lightboxImg = document.getElementById('lightboxImg');
+  const lightboxPrev = document.getElementById('lightboxPrev');
+  const lightboxNext = document.getElementById('lightboxNext');
+  let currentIndex = 0;
+
+  const loadLightboxImage = (index) => {
+    const name = IMAGE_NAMES[index];
+    lightboxImg.onerror = null;
+    lightboxImg.src = `images/${name}.${IMG_EXT}`;
+    lightboxImg.onerror = function () {
+      this.onerror = null;
+      this.src = `images/${name}.jpg`;
+    };
+  };
+
+  const openLightbox = (index) => {
+    currentIndex = index;
+    loadLightboxImage(index);
+    lightbox.classList.add('open');
+    document.body.style.overflow = 'hidden';
+  };
+
+  const closeLightbox = () => {
+    lightbox.classList.remove('open');
+    document.body.style.overflow = '';
+  };
+
+  const navigateLightbox = (delta) => {
+    const next = currentIndex + delta;
+    if (next >= 0 && next < IMAGE_NAMES.length) {
+      openLightbox(next);
+    }
+  };
 
   IMAGE_NAMES.forEach((name, i) => {
     const item = document.createElement('div');
@@ -136,35 +168,24 @@ document.addEventListener('DOMContentLoaded', () => {
     img.alt = ALTS[i] || name;
     img.loading = 'lazy';
 
-    img.addEventListener('click', () => {
-      lightboxImg.onerror = null;
-      lightboxImg.src = `images/${name}.${IMG_EXT}`;
-      lightboxImg.onerror = function () {
-        this.onerror = null;
-        this.src = `images/${name}.jpg`;
-      };
-      lightbox.classList.add('open');
-      document.body.style.overflow = 'hidden';
-    });
+    img.addEventListener('click', () => openLightbox(i));
 
     item.appendChild(img);
     galleryGrid?.appendChild(item);
   });
-
-  const closeLightbox = () => {
-    lightbox.classList.remove('open');
-    document.body.style.overflow = '';
-  };
 
   lightbox?.addEventListener('click', (e) => {
     if (e.target === lightbox) closeLightbox();
   });
 
   document.getElementById('lightboxClose')?.addEventListener('click', closeLightbox);
+  lightboxPrev?.addEventListener('click', () => navigateLightbox(-1));
+  lightboxNext?.addEventListener('click', () => navigateLightbox(1));
 
   document.addEventListener('keydown', (e) => {
-    if (e.key === 'Escape') closeLightbox();
-    if (e.key === 'Escape') closeVideo();
+    if (e.key === 'Escape') { closeLightbox(); closeVideo(); }
+    if (e.key === 'ArrowLeft') navigateLightbox(-1);
+    if (e.key === 'ArrowRight') navigateLightbox(1);
   });
 
   // --- Video ---

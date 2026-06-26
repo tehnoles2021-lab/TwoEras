@@ -659,6 +659,50 @@ img {
   border-radius: 100px;
 }
 
+.lightbox__nav {
+  position: fixed;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 2001;
+  width: 56px;
+  height: 80px;
+  border: none;
+  background: rgba(0,0,0,0.35);
+  backdrop-filter: blur(4px);
+  color: rgba(255,255,255,0.7);
+  font-size: 2.8rem;
+  line-height: 1;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: var(--transition);
+  user-select: none;
+}
+
+.lightbox__nav:hover {
+  background: rgba(0,0,0,0.6);
+  color: #fff;
+}
+
+.lightbox__nav--prev {
+  left: 0;
+  border-radius: 0 8px 8px 0;
+}
+
+.lightbox__nav--next {
+  right: 0;
+  border-radius: 8px 0 0 8px;
+}
+
+@media (max-width: 768px) {
+  .lightbox__nav {
+    width: 44px;
+    height: 60px;
+    font-size: 2rem;
+  }
+}
+
 /* ===== Location ===== */
 .location__grid {
   display: grid;
