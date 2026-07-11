@@ -2,9 +2,5 @@ name = "twoeras-form"
 main = "cloudflare-worker.js"
 compatibility_date = "2025-01-01"
 
-# Перед деплоем выполнить:
-#   wrangler secret put SENDGRID_KEY
-#
-# Локально ключ можно задать через .dev.vars или [vars] ниже
-# [vars]
-# SENDGRID_KEY = ""
+# Перед деплоем:
+#   wrangler secret put TELEGRAM_BOT_TOKEN

@@ -2,7 +2,6 @@ addEventListener('fetch', event => {
   event.respondWith(handleRequest(event.request))
 })
 
-// Telegram bot token задаётся через: wrangler secret put TELEGRAM_BOT_TOKEN
 const TELEGRAM_CHAT_ID = '2003616265'
 
 function corsOrigin(request) {
@@ -44,6 +43,13 @@ async function handleRequest(request) {
   const { name, phone, email, dates, message } = body
   const TOKEN = typeof TELEGRAM_BOT_TOKEN !== 'undefined' ? TELEGRAM_BOT_TOKEN : ''
 
+  if (!TOKEN) {
+    return new Response(JSON.stringify({ ok: false, error: 'Bot token not configured' }), {
+      status: 500,
+      headers: { ...ch, 'Content-Type': 'application/json' },
+    })
+  }
+
   const tgText = `📩 <b>Новая заявка с сайта «Две Эпохи»</b>
 
 <b>Имя:</b> ${esc(name)}
@@ -70,7 +76,7 @@ async function handleRequest(request) {
     }
 
     const errText = await tgRes.text()
-    console.error('Telegram error:', errText)
+    console.error('Telegram error:', tgRes.status, errText)
     return new Response(JSON.stringify({ ok: false, error: 'Telegram error' }), {
       status: 500,
       headers: { ...ch, 'Content-Type': 'application/json' },

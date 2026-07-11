@@ -215,8 +215,7 @@ document.addEventListener('DOMContentLoaded', () => {
   document.getElementById('videoClose')?.addEventListener('click', closeVideo);
 
   // --- Form ---
-  const FORM_ID = 'ky7r4r46i0q';
-  const TG_WORKER = 'https://twoeras-form.tehnoles2021.workers.dev/';
+  const WORKER_URL = 'https://twoeras-form.tehnoles2021.workers.dev/';
 
   document.getElementById('contactForm')?.addEventListener('submit', async (e) => {
     e.preventDefault();
@@ -237,39 +236,23 @@ document.addEventListener('DOMContentLoaded', () => {
       message: getVisibleMessage(),
     };
 
-    let ok = false;
-
     try {
-      const res = await fetch(`https://forminit.com/f/${FORM_ID}`, {
+      const res = await fetch(WORKER_URL, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          blocks: [
-            { type: 'sender', properties: { fullName: data.name, email: data.email, phone: data.phone } },
-            { type: 'text', name: 'dates', value: data.dates },
-            { type: 'text', name: 'message', value: data.message },
-          ],
-        }),
+        body: JSON.stringify(data),
       });
-      ok = res.ok;
-    } catch {
-      ok = false;
-    }
 
-    if (!ok) {
+      if (!res.ok) {
+        throw new Error('Worker error');
+      }
+    } catch {
       btn.innerHTML = originalText;
       btn.disabled = false;
       status.textContent = '❌ Ошибка отправки';
       status.className = 'form__status form__status--error';
       return;
     }
-
-    // Telegram (фоном — не блокируем пользователя)
-    fetch(TG_WORKER, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(data),
-    }).catch(() => {});
 
     status.textContent = '✅ Отправлено!';
     status.className = 'form__status form__status--success';
